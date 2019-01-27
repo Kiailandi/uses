@@ -1,0 +1,37 @@
+{
+  "name": "uses",
+  "version": "1.0.0",
+  "description": "A simple website to showcase some of my most used tools",
+  "repository": "https://github.com/Kiailandi/uses",
+  "author": "Kiailandi <Tommaso.Montefusco@hotmail.it>",
+  "license": "",
+  "husky": {
+    "hooks": {
+      "pre-commit": "gulp cleanSrc && git add dev/",
+      "post-push": "gulp deploy:gh-pages"
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "*",
+    "@babel/preset-env": "*",
+    "browser-sync": "*",
+    "critical": "*",
+    "gulp": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-babel": "*",
+    "gulp-clean": "*",
+    "gulp-clean-css": "*",
+    "gulp-concat": "*",
+    "gulp-gh-pages": "*",
+    "gulp-html-replace": "*",
+    "gulp-htmlclean": "*",
+    "gulp-imagemin": "*",
+    "gulp-pug": "*",
+    "gulp-sass": "*",
+    "gulp-uglify": "*",
+    "gulp-webserver": "*",
+    "husky": "*",
+    "node-sass": "*",
+    "pug": "*"
+  }
+}
