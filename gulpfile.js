@@ -49,9 +49,7 @@ const browsers = [
 
 gulp.task('buildPug', function () {
   return gulp.src(paths.srcPug)
-  .pipe(pug({
-
-  }))
+  .pipe(pug())
   .pipe(gulp.dest(paths.distPug));
 });
 
@@ -135,7 +133,7 @@ gulp.task('cleanDist', function () {
 
 gulp.task('build', gulp.series('buildPug', 'buildHTML', 'buildSass', 'buildCSS', 'buildCritical', 'buildJS', 'buildIMG', 'buildFONT'));
 
-gulp.task('serveSrc', gulp.series('buildPug:watch', 'buildSass:watch', function () {
+gulp.task('serveSrc', gulp.parallel('buildPug:watch', 'buildSass:watch', function () {
   return gulp.src(paths.src)
     .pipe(webserver({
       port: 3000,
