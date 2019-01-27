@@ -13,7 +13,7 @@ const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const imagemin = require('gulp-imagemin');
 const clean = require('gulp-clean');
-const ghPages = require('gulp-gh-pages');
+const ghpages = require('gh-pages');
 
 const paths = {
     src: 'dev/',
@@ -133,7 +133,7 @@ gulp.task('cleanDist', function () {
 
 gulp.task('build', gulp.series('buildPug', 'buildHTML', 'buildSass', 'buildCSS', 'buildCritical', 'buildJS', 'buildIMG', 'buildFONT'));
 
-gulp.task('serveSrc', gulp.parallel('buildPug:watch', 'buildSass:watch', function () {
+gulp.task('serveSrc', gulp.parallel('cleanSrc', 'buildPug:watch', 'buildSass:watch', function () {
   return gulp.src(paths.src)
     .pipe(webserver({
       port: 3000,
@@ -141,7 +141,7 @@ gulp.task('serveSrc', gulp.parallel('buildPug:watch', 'buildSass:watch', functio
   }));
 }));
 
-gulp.task('serveDist', gulp.series('build', function () {
+gulp.task('serveDist', gulp.series('cleanDist', 'build', function () {
   return gulp.src(paths.dist)
     .pipe(webserver({
       port: 3000,
@@ -149,7 +149,6 @@ gulp.task('serveDist', gulp.series('build', function () {
   }));
 }));
 
-gulp.task('deploy:gh-pages', gulp.series('cleanDist', 'build', function() {
-  return gulp.src(paths.distFolders)
-    .pipe(ghPages());
-}));
+gulp.task('deploy:gh-pages', gulp.series('cleanDist', 'build', 'cleanSrc', function() {
+  return ghpages.publish(paths.dist);
+}, 'cleanDist'));

@@ -2,3 +2,5 @@
 node_modules
 # dist folder [goes on gh-pages]
 dist
+# deploy gh-pages hidden folder
+.publish
