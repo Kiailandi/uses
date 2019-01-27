@@ -8,7 +8,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "gulp cleanSrc && git add dev/",
-      "post-push": "gulp deploy:gh-pages"
+      "pre-push": "gulp deploy:gh-pages"
     }
   },
   "devDependencies": {
