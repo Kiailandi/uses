@@ -153,6 +153,7 @@ gulp.task('serveDist', gulp.series('cleanDist', 'build', function () {
   }));
 }));
 
-gulp.task('deploy:gh-pages', gulp.series('cleanDist', 'build', function(done) {
-  ghpages.publish(paths.dist, done());
-}, 'cleanAll'));
+gulp.task('deploy:gh-pages', gulp.series('cleanDist', 'build', 'cleanSrc', function(done) {
+  ghpages.publish(paths.dist, gulp.series('cleanDist'));
+  done();
+}));
