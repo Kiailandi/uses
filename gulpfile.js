@@ -54,7 +54,7 @@ gulp.task('buildPug', function () {
 });
 
 gulp.task('buildPug:watch', function () {
-  gulp.watch(paths.srcPug, gulp.series('buildPug'));
+  gulp.watch(paths.srcPug, { ignoreInitial: false }, gulp.series('buildPug'));
 });
 
 gulp.task('buildHTML', function () {
@@ -75,7 +75,7 @@ gulp.task('buildSass', function () {
 });
 
 gulp.task('buildSass:watch', function () {
-  gulp.watch(paths.srcSass, gulp.series('buildSass'));
+  gulp.watch(paths.srcSass, { ignoreInitial: false }, gulp.series('buildSass'));
 });
 
 gulp.task('buildCSS', gulp.series('buildSass', function () {
@@ -87,16 +87,16 @@ gulp.task('buildCSS', gulp.series('buildSass', function () {
 }));
 
 gulp.task('buildCritical', function () {
-  return gulp.src(paths.distHTML + 'index.html')
+  return gulp.src(paths.distHTML + 'index.html', { allowEmpty: true })
       .pipe(critical({
         base: paths.dist,
         dest: 'index.html',
         inline: true,
         minify: true,
         css: [paths.distCSS + 'style.min.css'],
-        ignore: ['@font-face',/url\(/]
+        ignore: ['@font-face',/url\(/],
+        timeout: 5000
       }))
-      .on('error', function(err) { log.error(err.message); })
       .pipe(gulp.dest(paths.dist));
 });
 
@@ -131,6 +131,8 @@ gulp.task('cleanDist', function () {
     .pipe(clean());
 });
 
+gulp.task('cleanAll', gulp.parallel('cleanSrc', 'cleanDist'));
+
 gulp.task('build', gulp.series('buildPug', 'buildHTML', 'buildSass', 'buildCSS', 'buildCritical', 'buildJS', 'buildIMG', 'buildFONT'));
 
 gulp.task('serveSrc', gulp.parallel('cleanSrc', 'buildPug:watch', 'buildSass:watch', function () {
@@ -149,6 +151,6 @@ gulp.task('serveDist', gulp.series('cleanDist', 'build', function () {
   }));
 }));
 
-gulp.task('deploy:gh-pages', gulp.series('cleanDist', 'build', 'cleanSrc', function() {
-  return ghpages.publish(paths.dist);
-}, 'cleanDist'));
+gulp.task('deploy:gh-pages', gulp.series('cleanDist', 'build', function(cb = gulp.series('cleanAll')) {
+  ghpages.publish(paths.dist, cb);
+}));
