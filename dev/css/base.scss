@@ -1,0 +1,14 @@
+$font-stack: "Courier New", Courier, monospace;
+$primary-color: #F26968;
+$secondary-color: #6CBF84;
+$background-color: #323339;
+
+body {
+  font: 100% $font-stack;
+  color: $primary-color;
+  background-color: $background-color;
+}
+
+p {
+  color: $secondary-color;
+}

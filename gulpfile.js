@@ -53,8 +53,9 @@ gulp.task('buildPug', function () {
   .pipe(gulp.dest(paths.distPug));
 });
 
-gulp.task('buildPug:watch', function () {
-  gulp.watch(paths.srcPug, { ignoreInitial: false }, gulp.series('buildPug'));
+gulp.task('buildPug:watch', function (done) {
+  gulp.watch(paths.srcPug, { ignoreInitial: false }, gulp.series('buildPug'))
+  done();
 });
 
 gulp.task('buildHTML', function () {
@@ -74,8 +75,9 @@ gulp.task('buildSass', function () {
     .pipe(gulp.dest(paths.distSass));
 });
 
-gulp.task('buildSass:watch', function () {
+gulp.task('buildSass:watch', function (done) {
   gulp.watch(paths.srcSass, { ignoreInitial: false }, gulp.series('buildSass'));
+  done();
 });
 
 gulp.task('buildCSS', gulp.series('buildSass', function () {
@@ -151,6 +153,6 @@ gulp.task('serveDist', gulp.series('cleanDist', 'build', function () {
   }));
 }));
 
-gulp.task('deploy:gh-pages', gulp.series('cleanDist', 'build', function(cb = gulp.series('cleanAll')) {
-  ghpages.publish(paths.dist, cb);
-}));
+gulp.task('deploy:gh-pages', gulp.series('cleanDist', 'build', function(done) {
+  ghpages.publish(paths.dist, done());
+}, 'cleanAll'));
